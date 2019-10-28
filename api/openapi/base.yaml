@@ -1,0 +1,36 @@
+paths:
+  Ping:
+    get:
+      summary: server responds with PONG
+      operationId: api.handlers.general.ping
+      responses:
+        '200':
+          $ref: 'base.yaml#/responses/PingSuccess'
+
+responses:
+  PingSuccess:
+    description: Successful ping
+    content:
+      application/json:
+        schema:
+          type: string
+  Error:
+    description: Error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+schemas:
+  Base:
+    properties:
+      id:
+        type: integer
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
