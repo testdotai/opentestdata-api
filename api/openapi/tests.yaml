@@ -1,0 +1,93 @@
+paths:
+  NewTest:
+    post:
+      summary: Create a new test
+      operationId: api.handlers.tests.create
+      requestBody:
+        $ref: '#/requests/TestDetails'
+      responses:
+        '200':
+          $ref: '#/responses/TestDetails'
+        '500':
+          $ref: 'base.yaml#/responses/Error'
+      security:
+        - jwt: []
+  GetTest:
+    get:
+      summary: Get details of a test
+      parameters:
+        $ref: '#/parameters/TestId'
+      operationId: api.handlers.tests.detail
+      responses:
+        '200':
+          $ref: '#/responses/TestDetails'
+        '500':
+          $ref: 'base.yaml#/responses/Error'
+      security:
+        - jwt: []
+
+parameters:
+  TestId:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: The test ID
+
+requests:
+  TestDetails:
+    description: Test details
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/TestBase'
+
+responses:
+  TestDetails:
+    description: Test details
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/Test'
+
+schemas:
+  TestBase:
+    properties:
+      name:
+        type: string
+        maxLength: 160
+        minLength: 1
+      data:
+        type: array
+        items:
+          $ref: '#/schemas/TestData'
+    required:
+      - name
+      - data
+    additionalProperties: false 
+  Test:
+    allOf:
+      - $ref: '#/schemas/TestBase'
+      - $ref: 'base.yaml#/schemas/Base'
+      - properties:
+          user_id:
+            type: integer
+  TestData:
+    properties:
+      label:
+        type: string
+        maxLength: 80
+        minLength: 1
+      disposition:
+        type: string
+        enum:
+          - NEUTRAL
+          - POS
+          - NEG
+          - EDGE
+          - DESTRUCTIVE
+      datum_id:
+        type: integer

@@ -1,0 +1,52 @@
+paths:
+  Search:
+    post:
+      summary: Search for tests and data
+      operationId: api.handlers.search.search
+      requestBody:
+        $ref: '#/requests/Search'
+      responses:
+        '200':
+          $ref: '#/responses/SearchResults'
+      security:
+        - jwt: []
+
+requests:
+  Search:
+    description: Search parameters
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/SearchQuery'
+
+responses:
+  SearchResults:
+    description: Search results
+    content:
+      application/json:
+        schema:
+          $ref: '#/schemas/SearchResults'
+
+schemas:
+  SearchQuery:
+    properties:
+      type:
+        type: string
+        enum:
+          - ALL
+          - TESTS
+          - DATA
+      query:
+        type: string
+        minLength: 2
+  SearchResults:
+    properties:
+      tests:
+        type: array
+        items:
+          $ref: 'tests.yaml#/schemas/Test'
+      data:
+        type: array
+        items:
+          $ref: 'data.yaml#/schemas/Datum'
